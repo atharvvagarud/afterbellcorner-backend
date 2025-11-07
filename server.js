@@ -108,6 +108,12 @@ app.post('/orders', async (req, res) => {
       return res.status(400).json({ error: "Phone is required and must be numbers only." });
     }
 
+    if (phone.length < 7 || phone.length > 20) {
+      return res.status(400).json({
+        error: "Phone number length looks invalid (must be between 7 and 20 digits).",
+      });
+    }
+
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: "Order items must be a non-empty array." });
     }
