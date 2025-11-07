@@ -48,6 +48,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'After Bell Corner backend is running 🎓' });
 });
 
+// Dedicated health endpoint for uptime checks
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+
 // DB test route to ensure connection is usable
 app.get('/db-test', async (req, res) => {
   try {
