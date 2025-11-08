@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     const duration = Date.now() - start;
     const now = new Date().toISOString();
     console.log(
-      `[${now}] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${duration}ms)`
+      `[${now}] ${req.ip} ${req.method} ${req.originalUrl} -> ${res.statusCode} (${duration}ms)`
     );
   });
 
