@@ -59,7 +59,7 @@ app.get('/health', (req, res) => {
 });
 
 
-// DB test route to ensure connection is usable
+// DB test route to ensure MongoDB connection is alive and list collections
 app.get('/db-test', async (req, res) => {
   try {
     const db = getDb();
@@ -77,7 +77,7 @@ app.get('/db-test', async (req, res) => {
   }
 });
 
-// Get all lessons
+// GET /lessons - return all lessons from the database
 app.get('/lessons', async (req, res) => {
   try {
     const db = getDb();
@@ -93,7 +93,7 @@ app.get('/lessons', async (req, res) => {
   }
 });
 
-// Create an order
+// POST /orders - create a new order with basic validation
 app.post('/orders', async (req, res) => {
   try {
     const db = getDb();
@@ -151,7 +151,7 @@ app.post('/orders', async (req, res) => {
   }
 });
 
-// Update lesson spaces by id
+// PUT /lessons/:id - update lesson spaces by id
 app.put('/lessons/:id', async (req, res) => {
   try {
     const db = getDb();
