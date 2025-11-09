@@ -38,6 +38,8 @@ app.use((err, req, res, next) => {
 
   res.status(500).json({
     error: 'Internal server error',
+    message: err.message || 'Unexpected error',
+    timestamp: new Date().toISOString(),
   });
 });
 
