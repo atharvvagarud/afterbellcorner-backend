@@ -197,6 +197,10 @@ app.put('/lessons/:id', async (req, res) => {
   }
 });
 
+// Serve images 
+const path = require("path");
+app.use("/images", express.static(path.join(__dirname, "images")));
+
 
 // 404 handler for unknown routes
 app.use((req, res, next) => {
