@@ -7,9 +7,15 @@ async function seedLessons() {
     const lessonsCollection = db.collection('lessons');
 
     const existingCount = await lessonsCollection.countDocuments();
+
     if (existingCount > 0) {
-      console.log(`Lessons collection already has ${existingCount} documents. Skipping seed.`);
-      process.exit(0);
+      console.log(
+        `Lessons collection already has ${existingCount} documents. ` +
+        `Clearing and reseeding...`
+      );
+      await lessonsCollection.deleteMany({});
+    } else {
+      console.log('Lessons collection is empty. Seeding fresh data...');
     }
 
     const lessons = [
