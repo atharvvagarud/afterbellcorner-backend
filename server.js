@@ -7,9 +7,30 @@ const { connectToDatabase, getDb } = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ===== MIDDLEWARE =====
+// ===== MIDDLEWARE & CORS =====
 
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:5173',              // Vite dev server
+  'http://127.0.0.1:5173',              // sometimes used locally
+  'https://atharvvagarud.github.io',    // GitHub Pages (After Bell Corner frontend)
+];
+
+app.use(cors({
+  origin(origin, callback) {
+    // Allow requests with no origin (like Postman, curl, server-to-server)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Origin not allowed
+    return callback(new Error('Not allowed by CORS'), false);
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+}));
+
 app.use(express.json());
 
 // Logger middleware
@@ -27,21 +48,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-// Central error handler (always returns JSON)
-app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err);
-
-  if (res.headersSent) {
-    return next(err);
-  }
-
-  res.status(500).json({
-    error: 'Internal server error',
-    message: err.message || 'Unexpected error',
-    timestamp: new Date().toISOString(),
-  });
-});
 
 // ===== ROUTES =====
 
@@ -208,6 +214,21 @@ app.use((req, res, next) => {
     error: 'Route not found',
     path: req.originalUrl,
     method: req.method,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Central error handler (always returns JSON)
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(500).json({
+    error: 'Internal server error',
+    message: err.message || 'Unexpected error',
     timestamp: new Date().toISOString(),
   });
 });
